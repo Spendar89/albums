@@ -110,11 +110,11 @@ class Album < ActiveRecord::Base
   end
   
   def set_back_cover(url)
-    self.update_attributes(:back_cover => converted_back_cover(url))
+    self.update_attributes(:back_cover => url)
   end
   
   def set_front_cover(url)
-    self.update_attributes(:front_cover => converted_front_cover(url))
+    self.update_attributes(:front_cover => url)
   end
       
   private
