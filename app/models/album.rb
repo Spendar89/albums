@@ -7,7 +7,7 @@ require 'nokogiri'
 
 class Album < ActiveRecord::Base
   
-  attr_accessible :genre, :release_date, :title, :album_art, :artist_name, :mb_id, :in_collection, :front_cover, :back_cover, :description
+  attr_accessible :genre, :release_date, :title, :album_art, :artist_name, :mb_id, :in_collection, :front_cover_image, :back_cover_image, :description
   has_many :tracks
   belongs_to :artist
   validates :title, :uniqueness => {:scope => :artist_id}
@@ -15,6 +15,18 @@ class Album < ActiveRecord::Base
     set_tracks
     set_cover_art
   end
+  
+  has_attached_file :front_cover_image, styles: {
+    thumb: '100x100>',
+    square: '200x200#',
+    medium: '300x300>'
+  }
+  
+  has_attached_file :back_cover_image, styles: {
+    thumb: '100x100>',
+    square: '200x200#',
+    medium: '300x300>'
+  }
   
   def set_yt_ids
     self.tracks.each do |track|

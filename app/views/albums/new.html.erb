@@ -5,6 +5,14 @@
 	<%= form_tag "/albums", :method => :post do  %>
 		<%= text_field :title, "", :placeholder => "Title" %><br/>
 		<%= text_field :artist_name, "", :placeholder => "Artist" %><br/>
+     <div class="field">
+          <%= f.label :front_cover_image %><br />
+          <%= f.file_field :front_cover_image %><br/>
+        </div>
+        <div class="field">
+          <%= f.label :back_cover_image %><br />
+          <%= f.file_field :back_cover_image %><br/>
+        </div>
 		<%= submit_tag %>
 	<% end %>
 </div>

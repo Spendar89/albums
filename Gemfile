@@ -26,12 +26,18 @@ gem 'thin'
 
 gem 'powder'
 
+gem "paperclip", "~> 3.0"
+
+gem 'aws-sdk'
+
 gem 'youtube_it'
 
 gem 'wikipedia-client'
 
 gem "font-awesome-rails"
+
 gem "discogs-wrapper"
+
 gem "htmlentities"
 
 gem 'anjlab-bootstrap-rails', '>= 2.3', :require => 'bootstrap-rails'
