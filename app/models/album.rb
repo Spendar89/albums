@@ -13,7 +13,6 @@ class Album < ActiveRecord::Base
   validates :title, :uniqueness => {:scope => :artist_id}
   after_create do 
     set_tracks
-    set_cover_art
   end
   
   has_attached_file :front_cover_image, styles: {

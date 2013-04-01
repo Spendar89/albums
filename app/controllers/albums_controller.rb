@@ -5,6 +5,16 @@ class AlbumsController < ApplicationController
     @album = Album.new
   end
   
+  def preview
+    begin
+      @artist = Artist.find_or_create_by_name(:name => params[:artist_name][0])
+      @album = @artist.set_albums(params[:title][0])
+      @album.set_yt_ids
+    rescue NoMethodError
+      flash[:notice] = "Cannot Find Album"
+    end
+  end
+  
   def create
     begin
       @artist = Artist.find_or_create_by_name(:name => params[:artist_name][0])
