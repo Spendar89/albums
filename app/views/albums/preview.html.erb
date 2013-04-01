@@ -1,16 +1,30 @@
-<div class = "alert-error">
-	<%= flash[:notice] %>
-</div>
-<div class ="form" style="margin: 5%">
-	<%= form_tag "/albums", :method => :post do  %>
-		<%= text_field :title, @album.title, :placeholder => "Title" %><br/>
-		<%= text_field :artist_name, @album.artist_name, :placeholder => "Artist" %><br/>
-    <p><%= @album.all_front_covers %></p>
-    <p><%= @album.all_back_covers %></p>
-    <%= f.label :change_front_cover_image %><br />
-    <%= f.file_field :front_cover_image %><br/>
-    <%= f.label :change_back_cover_image %><br />
-    <%= f.file_field :back_cover_image %><br/>
-		<%= submit_tag %>
-	<% end %>
+<div class="new-container" style="background: rgba(255, 255, 255, .8); width: 500px; padding: 2%; margin: 8%; margin-left: 2%">
+  <div class = "alert-error">
+  	<%= flash[:notice] %>
+  </div>
+  <h3> Set Album Art for <%= @album.title %> by <%= @album.artist_name %></h3>
+  <div class="found-artwork">
+    <h5>Default Front Cover:</h5>
+    <% if @album.front_cover_image.exists? %>
+      <%= image_tag(@album.front_cover_image, :width => "500") %>
+    <% else %>
+      <p> No Image Found </p>
+    <% end %>
+    <h5>Default Back Cover</h5>
+    <% if @album.back_cover_image.exists? %>
+      <%= image_tag(@album.back_cover_image, :width => "500") %>
+    <% else %>
+      <p> No Image Found </p>
+    <% end %>
+  </div>
+   <%= form_tag "/albums", :method => :post do  %>
+      <%= hidden_field_tag :artist_id, @album.artist_id %>
+      <%= hidden_field_tag :album_id, @album.id %>
+      <%= label_tag :change_front_cover_image %><br />
+      <%= text_field_tag :front_cover_url %><br/>
+      <%= label_tag :change_back_cover_image %><br />
+      <%= text_field_tag :back_cover_url %><br/>
+  		<%= submit_tag %>
+  	<% end %>
+  </div>
 </div>

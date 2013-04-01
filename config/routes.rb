@@ -4,7 +4,7 @@ Albums::Application.routes.draw do
 
   resources :albums do
     collection do
-      get 'preview'
+      match 'preview'
     end
   end
   

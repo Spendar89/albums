@@ -1,12 +1,14 @@
-<div class = "alert-error">
-	<%= flash[:notice] %>
-</div>
-<div class ="form" style="margin: 5%">
-	<%= form_tag "/albums/preview", :method => :post do  %>
-		<%= text_field :title, "", :placeholder => "Title" %><br/>
-		<%= text_field :artist_name, "", :placeholder => "Artist" %><br/>
-		<%= submit_tag %>
-	<% end %>
+<div class="new-container" style="margin-top: 8%">
+  <div class = "alert-error">
+  	<%= flash[:notice] %>
+  </div>
+  <div class ="form" style="margin: 5%">
+  	<%= form_tag preview_albums_path, :method => :post do  %>
+  		<%= text_field :title, "", :placeholder => "Title" %><br/>
+  		<%= text_field :artist_name, "", :placeholder => "Artist" %><br/>
+  		<%= submit_tag %>
+  	<% end %>
+  </div>
 </div>
 
 <%= @youtube %>

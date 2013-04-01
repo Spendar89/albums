@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130401144928) do
+ActiveRecord::Schema.define(:version => 20130401172346) do
 
   create_table "albums", :force => true do |t|
     t.string   "title"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(:version => 20130401144928) do
     t.boolean  "in_collection"
     t.string   "back_cover"
     t.string   "front_cover"
-    t.string   "description"
+    t.text     "description"
     t.string   "front_cover_image_file_name"
     t.string   "front_cover_image_content_type"
     t.integer  "front_cover_image_file_size"

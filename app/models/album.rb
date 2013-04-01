@@ -34,6 +34,25 @@ class Album < ActiveRecord::Base
     end 
   end
   
+  def set_covers_from_urls(front_url, back_url)
+    self.update_attributes(:front_cover_image => open(front_url), :back_cover_image => open(back_url))
+  end
+  
+  def set_default_covers
+    set_default_front_cover
+    set_default_back_cover
+  end
+  
+  def set_default_front_cover
+    front_cover_url = get_front_cover
+    self.update_attributes(:front_cover_image => open(front_cover_url)) if front_cover_url
+  end
+  
+  def set_default_back_cover
+    back_cover_url = get_back_cover
+    self.update_attributes(:back_cover_image => open(back_cover_url)) if back_cover_url
+  end
+
   def get_result
     q = CGI::escape("#{title.gsub(' ','_')}")
     first = JSON.parse(open("http://en.wikipedia.org/w/api.php?format=json&action=parse&page=#{q}&prop=text&section=0").read)
@@ -42,9 +61,13 @@ class Album < ActiveRecord::Base
     return second["parse"]["text"]["*"] if has_description?(second)
   end
   
-  def set_description
+  def get_description
     result = get_result
     Nokogiri::HTML(result).css("p").text.split(".")[0...-1].join(".") + "." if result
+  end
+  
+  def set_description
+    self.update_attributes(:description => get_description)
   end
   
   def has_description?(result)
@@ -72,6 +95,14 @@ class Album < ActiveRecord::Base
     end
   end
   
+  def get_back_cover
+    begin
+      cover_art.select{|image| image.type == "secondary"}.last.uri
+      rescue NoMethodError
+        nil
+    end
+  end
+  
   def all_back_covers
     begin
     cover_art.select{|image| image.type == "secondary"}.map{|cover| cover.uri}.compact
@@ -86,46 +117,6 @@ class Album < ActiveRecord::Base
     rescue NoMethodError
       nil
     end
-  end
-  
-  def get_back_cover
-    begin
-      cover_art.select{|image| image.type == "secondary"}.last.uri
-      rescue NoMethodError
-        nil
-    end
-  end
-  
-  def converted_front_cover(url=nil)
-    file_name = "album_art/front_#{self.title.downcase.gsub(' ', '_').gsub('/', '_')}.jpg"
-    album_art_file = "app/assets/images/#{file_name}"
-    open(album_art_file, 'wb') do |file|
-      url ? file << open(url).read : file << open(get_front_cover).read
-    end
-    file_name
-  end
-  
-  def converted_back_cover(url=nil)
-    unless get_back_cover.nil? && url.nil?
-      file_name = "album_art/back_#{self.title.downcase.gsub(' ', '_').gsub('/', '_')}.jpg"
-      album_art_file = "app/assets/images/#{file_name}"
-      open(album_art_file, 'wb') do |file|
-        url ? file << open(url).read : file << open(get_back_cover).read
-      end
-      file_name
-    end
-  end
-  
-  def set_cover_art
-    self.update_attributes(:front_cover => get_front_cover, :back_cover => get_back_cover)
-  end
-  
-  def set_back_cover(url)
-    self.update_attributes(:back_cover => url)
-  end
-  
-  def set_front_cover(url)
-    self.update_attributes(:front_cover => url)
   end
       
   private

@@ -4,7 +4,7 @@
       <div class="invisible-overlay">
         <i class = "front-play-track icon-play icon-4x">
         </i>
-  			<%= image_tag album[:front_cover], :class => "album-art" %>
+  			<%= image_tag album.front_cover_image, :class => "album-art" %>
       </div>
     </div>
     <div class="back">
@@ -16,11 +16,11 @@
   			<i class = "prev-track icon-backward icon-4x">
   			</i>
       </div>
-    	  <%= image_tag "#{album[:back_cover]}", :class => "back-cover album-art" %>
+    	  <%= image_tag album.back_cover_image, :class => "back-cover album-art" %>
     </div>
     <div class="right">3</div>
     <div class="left">
-		<%= image_tag "#{album[:back_cover]}", :class => "side-cover" %>
+		<%= image_tag album.back_cover_image, :class => "side-cover" %>
 	</div>
     <div class="top">5</div>
     <div class="bottom">6</div>
