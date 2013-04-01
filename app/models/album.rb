@@ -106,10 +106,7 @@ class Album < ActiveRecord::Base
   end
   
   def set_cover_art
-    if get_front_cover
-      # mod_front_cover = get_front_cover.gsub("api.discogs.com", "s.pixogs.com")
-      self.update_attributes(:front_cover => converted_front_cover, :back_cover => converted_back_cover)
-    end
+    self.update_attributes(:front_cover => get_front_cover, :back_cover => get_back_cover)
   end
   
   def set_back_cover(url)
