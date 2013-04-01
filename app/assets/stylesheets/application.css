@@ -8,6 +8,135 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require twitter/bootstrap
+ *= require font-awesome
  *= require_self
  *= require_tree .
  */
+
+ body{
+	 background: url("record_store.jpg");
+	 background-size: cover;
+ }
+ 
+ .albums-container{
+   background: rgba(1000, 1000, 1000, .2);
+   width: 100%;
+   margin-left: auto;
+   margin-right: auto;
+ }
+ 
+ .albums-div{
+   width: 80%;
+   float: left;
+   overflow: scroll;
+ }
+ 
+ .now-playing-div{
+   float: left;
+   font-family: 'Amatic SC', cursive;
+   color: black;
+   font-size: 30pt;
+   line-height: 40pt;
+   width: 19%;
+   margin-top: 7.5%;
+ }
+ 
+ .now-playing-div h3{
+   font-size: 40pt;
+   line-height: 40pt;
+ }
+ 
+ .now-playing-div h5{
+   font-size: 30pt;
+   line-height: 30pt;
+ }
+ 
+ .now-playing-div p{
+   font-size: 20pt;
+   line-height: 30pt;
+ }
+ 
+ .description-div{
+   max-height: 500px;
+   overflow:scroll;
+ }
+ .play-track, .front-play-track, .next-track, .prev-track{
+	 position: absolute;
+	 color: white;
+	 margin-left: 260px;
+	 margin-right: auto;
+	 margin-top: 210px;
+	 cursor: pointer;
+	 visibility:visible;
+ }
+ 
+ .prev-track{
+	 margin-left: 345px;
+ }
+ 
+ .front-play-track{
+   visibility: hidden;
+   font-size: 150px;
+   text-align: center;
+   left: -30px !important;
+   top: -40px;
+ }
+ 
+ .play-track{
+   -webkit-transform: rotateY( 180deg );
+  right: 245px !important;
+ }
+ 
+ .next-track{
+	 margin-left: 155px;
+ }
+ 
+ .play-track:hover, .front-play-track:hover, .next-track:hover, .prev-track:hover{
+	 color: #d3d3d3;
+ }
+ 
+ .play-track:active, .next-track:active, .prev-track:active{
+	 color: #535353;
+ }
+ 
+ .lcd-div{
+	 text-align: center;
+   float: right;
+	 height: 20px;
+   margin-right: 20px;
+	 padding: 14px; 
+	 background: #d6eee2;
+	 box-shadow: 0px 0px 2px #7b8982;
+ }
+ 
+ .lcd-type{
+	font-family: 'Share Tech Mono', sans-serif;
+	font-size: 25pt;
+	line-height: 18pt;
+ }
+ .navbar-inner{
+	 padding: 10px;
+ }
+ 
+ .navbar-inner .brand{
+	 margin-left: 10px;
+ }
+ 
+ .brand{
+	 font-size: 50px !important;
+	 font-family: 'Amatic SC', cursive;
+	 color: #fcf692 !important;
+ }
+ 
+ .nav li a{
+	 font-size: 14px;
+	 color: black !important;
+ }
+ 
+ .invisible-overlay{
+   position: absolute;
+   
+   height: 100%;
+   width: 100%;
+ }

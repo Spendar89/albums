@@ -14,25 +14,24 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
 
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
 end
 
 gem 'jquery-rails'
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'debugger'
 
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
+gem 'thin'
 
-# Use unicorn as the app server
-# gem 'unicorn'
+gem 'powder'
 
-# Deploy with Capistrano
-# gem 'capistrano'
+gem 'youtube_it'
 
-# To use debugger
-# gem 'debugger'
+gem 'wikipedia-client'
+
+gem "font-awesome-rails"
+gem "discogs-wrapper"
+gem "htmlentities"
+
+gem 'anjlab-bootstrap-rails', '>= 2.3', :require => 'bootstrap-rails'

@@ -1,0 +1,99 @@
+// Place all the styles related to the albums controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.album-art {
+	height: 97%; 
+	margin-top: 1%; 
+	width: 88%; 
+	margin-left: 10%;
+  cursor: pointer;
+}
+
+.back-cover{
+	clip:rect(0px 508px 455px 31px);
+	position: absolute;
+	margin-left: 0%;
+	margin-top: 0.5%;
+	margin-top: 0.25%;
+	height: 98%;
+	width: 200%; 
+	-webkit-transform:  scaleX(1.1) rotateX( 180deg ) rotateY(180deg);
+  z-index: -10000;	
+}
+
+.side-cover{
+	height: 100%;
+	min-width: 540px;
+	position: absolute;
+}
+
+.container-cube {
+  width: 500px;
+  height: 500px;
+  position: relative;
+ -webkit-perspective: 1000px;
+ float: left;
+}
+
+.cube {
+  width: 540px;
+  height: 470px;
+  position: absolute;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: translateZ( -200px ); 
+  -webkit-transition: .5s linear;
+}
+
+.cube .front, .cube .back{
+  background-size: cover;
+  width: 540px;
+  height: 470px; 
+  display: block;
+  position: absolute;
+  overflow: hidden;
+}
+
+.cube .front{
+   background-image: url('jewel_case.png'); 
+}
+
+.cube .back{
+	background-image: url('jewel_case_back.png');
+}
+
+.cube .right, .cube .left{
+  display: block;
+  position: absolute;
+	width: 30px;
+	height: 98%;
+	margin-bottom: 1%;
+	background: black;
+	border: 2pt solid #a5a5a5;
+	border-radius: 2px;
+	overflow: hidden;
+}
+
+.show-back{
+ -webkit-transform:  rotateX( 180deg ) translateZ( 15px );
+}
+
+.flipped{
+  -webkit-transform: translateZ( -200px ) rotateY(  180deg );
+}
+
+.controls-div i{
+  -webkit-transform:  rotateY( -180deg );
+}
+
+.cube .front  { -webkit-transform: rotateY(   0deg ) translateZ( 15px );}
+//.cube .back   { -webkit-transform:  rotateX( 180deg ) translateZ( 15px ); }
+.cube .right  { -webkit-transform: rotateY(  90deg ) translateZ( 510px ); }
+.cube .left   { -webkit-transform:  rotateY( -90deg ) translateZ( 17px ); }
+
+
+//.cube:hover { -webkit-transform: translateZ( -200px ) rotateY(  180deg ); }
+
+
+
