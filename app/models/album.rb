@@ -34,8 +34,9 @@ class Album < ActiveRecord::Base
     end 
   end
   
-  def set_covers_from_urls(front_url, back_url)
-    self.update_attributes(:front_cover_image => open(front_url), :back_cover_image => open(back_url))
+  def set_covers_from_urls(front_url=nil, back_url=nil)
+    self.update_attributes(:front_cover_image => open(front_url)) if front_url
+    self.update_attributes(:back_cover_image => open(back_url)) if back_url 
   end
   
   def set_default_covers
