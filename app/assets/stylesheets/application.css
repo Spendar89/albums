@@ -38,10 +38,17 @@
    color: black;
    font-size: 30pt;
    line-height: 40pt;
-   width: 19%;
-   margin-top: 7.5%;
+   width: 18%;
+   margin-top: 8%;
  }
  
+ .title-div{
+   background: rgba(0, 0, 0, 0.6);
+   color: #a1b7ff;
+   padding: 5px;
+   padding-bottom: 4px;
+   padding-left: 8px;
+ }
  .now-playing-div h3{
    font-size: 40pt;
    line-height: 40pt;
@@ -56,11 +63,17 @@
    font-size: 20pt;
    line-height: 30pt;
  }
- 
  .description-div{
    max-height: 500px;
    overflow:scroll;
+   color: #f4836c;
+   font-weight: bold;
+   background: rgba(0, 0, 0, 0.6);
+   padding: 5px;
+   padding-left: 8%;
+   margin-top: 15%;
  }
+
  .play-track, .front-play-track, .next-track, .prev-track{
 	 position: absolute;
 	 color: white;

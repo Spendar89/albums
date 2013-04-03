@@ -3,6 +3,7 @@ require 'open-uri'
 require 'discogs'
 require 'wikipedia'
 require 'nokogiri'
+require 'digest/md5'
 
 
 class Album < ActiveRecord::Base
@@ -13,6 +14,7 @@ class Album < ActiveRecord::Base
   validates :title, :uniqueness => {:scope => :artist_id}
   after_create do 
     set_tracks
+    set_description
   end
   
   has_attached_file :front_cover_image, styles: {
@@ -68,7 +70,21 @@ class Album < ActiveRecord::Base
   end
   
   def set_description
-    self.update_attributes(:description => get_description)
+    self.update_attributes(:description => get_review)
+  end
+  
+  def rovi_md5
+    api_key = ENV['ROVI_API_KEY']
+    secret_key = ENV['ROVI_SECRET_KEY']
+    unix_time = Time.now.to_i.to_s
+    text = api_key + secret_key + unix_time
+    Digest::MD5.hexdigest(text)
+  end
+  
+  def get_review
+    rovi_api_key = ENV['ROVI_API_KEY']
+    hash = JSON.parse(open("http://api.rovicorp.com/data/v1/album/primaryreview?album=#{title.gsub(' ', '+')}&country=US&language=en&format=json&apikey=#{rovi_api_key}&sig=#{rovi_md5}").read)
+    hash["primaryReview"]["text"].gsub(/\[\/{0,1}roviLink.{0,20}\]/, "")
   end
   
   def has_description?(result)
