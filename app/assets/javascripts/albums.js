@@ -151,7 +151,7 @@ function onPlayerReady(event) {
 //    the player should play for six seconds and then stop.
 var done = false;
 function onPlayerStateChange(event) {        
-    if((event.data === 0) && ($('.icon-pause').data('playing') == true)) {          
+    if(event.data === 0) {          
       $('.icon-pause').siblings('.next-track').trigger('click');
     }
 }
