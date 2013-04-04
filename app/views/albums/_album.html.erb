@@ -11,7 +11,7 @@
       <div class="controls-div">
   			<i class = "next-track icon-forward icon-4x">
   			</i>
-        <i class = "play-track icon-play icon-4x" data-description = "<%= album.description %>" data-title = "<%= album.title %>" data-artist="<%= album.artist_name %>" data-position = "0" data-tracks-array = "<%= album.tracks.map(&:yt_id) %>" data-max-tracks = "<%= album.tracks.length %>" data-loaded = "false" data-playing = "false" id = "<%=album.tracks.first.try(:yt_id) %>">
+        <i class = "play-track icon-play icon-4x" data-description = "<%= album.description %>" data-title = "<%= album.title %>" data-artist="<%= album.artist_name %>" data-position = "0" data-tracks-array = "<%= album.tracks.order(:position).map(&:yt_id) %>" data-max-tracks = "<%= album.tracks.length %>" data-loaded = "false" data-playing = "false" id = "<%=album.tracks.order(:position).first.try(:yt_id) %>">
         </i>
   			<i class = "prev-track icon-backward icon-4x">
   			</i>
