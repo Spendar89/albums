@@ -21,7 +21,8 @@ function onYouTubeIframeAPIReady() {
 	                'html5': 1
 	            },
     events: {
-      'onReady': onPlayerReady
+      'onReady': onPlayerReady,
+    'onStateChange': onPlayerStateChange
     }
   });
 }
@@ -149,11 +150,10 @@ function onPlayerReady(event) {
 //    The function indicates that when playing a video (state=1),
 //    the player should play for six seconds and then stop.
 var done = false;
-function onPlayerStateChange(event) {
-  if (event.data == YT.PlayerState.PLAYING && !done) {
-    setTimeout(stopVideo, 6000);
-    done = true;
-  }
+function onPlayerStateChange(event) {        
+    if(event.data === 0) {          
+      $('.icon-pause').siblings('.next-track').trigger('click');
+    }
 }
 function stopVideo() {
   player.stopVideo();
