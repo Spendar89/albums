@@ -91,7 +91,7 @@ function onPlayerReady(event) {
 				trackStopWatch.restart();
 				var tracksArray = $(this).data('tracks-array');
 				yt_id = tracksArray[0]
-				player.loadVideoById(yt_id, 5, "small");
+				player.loadVideoById(yt_id);
 				$(this).data("loaded", true);	
 			};
 			$(this).removeClass('icon-play').addClass('icon-pause');
@@ -115,12 +115,14 @@ function onPlayerReady(event) {
 		trackIndex += 1
 		$('#lcd-position').text("0"+(trackIndex + 1));
 		trackStopWatch.restart();
-		if(trackIndex > tracksArray.length - 1){ 
+		if(trackIndex > tracksArray.length - 1){
+      trackStopWatch.restart();
+      return 
 			trackIndex = tracksArray.length - 1;
 			playButton.data('position', trackIndex);
 		}
 		var nextYtId = tracksArray[trackIndex]
-		player.loadVideoById(nextYtId, 5, "small");
+		player.loadVideoById(nextYtId);
 		trackStopWatch.startSecs();
 		trackStopWatch.startMins();
 	})
@@ -138,7 +140,7 @@ function onPlayerReady(event) {
 			playButton.data('position', trackIndex);
 		}
 		var prevYtId = tracksArray[trackIndex]
-		player.loadVideoById(prevYtId, 5, "small");
+		player.loadVideoById(prevYtId);
 		trackStopWatch.startSecs();
 		trackStopWatch.startMins();
 	})
