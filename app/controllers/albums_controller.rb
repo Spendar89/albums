@@ -40,6 +40,6 @@ class AlbumsController < ApplicationController
   end
   
   def index
-    @albums = Album.where("albums.in_collection = ?", true)
+    @albums = Album.where(in_collection: true).order(:created_at).reverse
   end
 end
