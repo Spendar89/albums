@@ -76,7 +76,7 @@
 
  .play-track, .front-play-track, .next-track, .prev-track{
 	 position: absolute;
-	 color: white;
+	 color: #eaeaea;
 	 margin-left: 260px;
 	 margin-right: auto;
 	 margin-top: 210px;
