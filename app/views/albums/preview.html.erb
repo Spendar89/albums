@@ -6,13 +6,15 @@
   <div class="found-artwork">
     <h5>Default Front Cover:</h5>
     <% if @album.front_cover_image.exists? %>
-      <%= image_tag(@album.front_cover_image.url, :width => "500") %>
+      <%= image_tag(@album.front_cover_image.url, :width => "500", :id => "front-cover-image")%>
+       <%= link_to "next", change_cover_album_path(@album, :index => 0, :side => "front"), :id => "change-front-button", :class => "btn btn-secondary", :remote => "true" %>
     <% else %>
       <p> No Image Found </p>
     <% end %>
     <h5>Default Back Cover</h5>
     <% if @album.back_cover_image.exists? %>
-      <%= image_tag(@album.back_cover_image.url, :width => "500") %>
+      <%= image_tag(@album.back_cover_image.url, :width => "500", :id => "back-cover-image") %>
+      <%= link_to "next", change_cover_album_path(@album, :index => 0, :side => "back"), :id => "change-back-button", :class => "btn btn-secondary",  :remote => "true" %>
     <% else %>
       <p> No Image Found </p>
     <% end %>

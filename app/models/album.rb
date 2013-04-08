@@ -20,42 +20,28 @@ class Album < ActiveRecord::Base
   has_attached_file :front_cover_image, styles: {
     thumb: '100x100>',
     square: '200x200#',
-    medium: '300x300>'
+    medium: '500x500>'
   }
   
   has_attached_file :back_cover_image, styles: {
     thumb: '100x100>',
     square: '200x200#',
-    medium: '300x300>'
+    medium: '500x500>'
   }
   
-  def set_yt_ids
-    self.tracks.each do |track|
-      search_result = Youtube::Search.new("#{self.artist_name}  #{track.title}").try(:yt_id) 
-      track.update_attribute(:yt_id, search_result) if search_result
-    end 
+  def discogs_id
+    hash = JSON.parse(open("http://api.discogs.com/database/search?type=releases&artist=#{CGI::escape(artist.discogs_name)}&release_title=#{CGI::escape(title)}").read)
+    hash["results"].first["id"]
   end
   
-  def set_covers_from_urls(front_url, back_url)
-    self.update_attributes(:front_cover_image => open(front_url)) unless front_url.empty?
-    self.update_attributes(:back_cover_image => open(back_url)) unless back_url.empty?
+  def artist
+    Artist.find_by_name(artist_name)
   end
   
-  def set_default_covers
-    set_default_front_cover
-    set_default_back_cover
+  def tracklist
+    JSON.parse(open("http://api.discogs.com/releases/#{discogs_id}").read)["tracklist"]
   end
   
-  def set_default_front_cover
-    front_cover_url = get_front_cover
-    self.update_attributes(:front_cover_image => open(front_cover_url)) if front_cover_url
-  end
-  
-  def set_default_back_cover
-    back_cover_url = get_back_cover
-    self.update_attributes(:back_cover_image => open(back_cover_url)) if back_cover_url
-  end
-
   def get_result
     q = CGI::escape("#{title.gsub(' ','_')}")
     first = JSON.parse(open("http://en.wikipedia.org/w/api.php?format=json&action=parse&page=#{q}&prop=text&section=0").read)
@@ -95,59 +81,58 @@ class Album < ActiveRecord::Base
   
   def cover_art
     wrapper = Discogs::Wrapper.new("albums")
-    artist_name = self.artist_name
-    artist_name = "#{artist_name[4..-1]}, the" if artist_name.split(" ").first.downcase == "the"
-    all_releases = wrapper.get_artist(artist_name).main_releases
-    release = all_releases.select{|release| release.title == self.title}.first
-    return unless release
-    release_id = release.main_release
-    wrapper.get_release(release_id).images if release_id
-  end
-    
-  def get_front_cover
-    begin
-      cover_art.select{|image| image.type == "primary"}.first.uri
-      rescue NoMethodError
-        nil
-    end
+    wrapper.get_release(discogs_id).try(:images)
   end
   
-  def get_back_cover
-    begin
-      cover_art.select{|image| image.type == "secondary"}.last.uri
-      rescue NoMethodError
-        nil
-    end
+  def set_covers_from_urls(front_url, back_url)
+    self.update_attributes(:front_cover_image => open(front_url)) unless front_url.empty?
+    self.update_attributes(:back_cover_image => open(back_url)) unless back_url.empty?
+  end
+  
+  def set_default_covers
+    set_default_front_cover
+    set_default_back_cover
+  end
+  
+  def set_default_front_cover(index = 0)
+    front_cover_url = get_front_cover(index)
+    self.update_attributes(:front_cover_image => open(front_cover_url)) if front_cover_url
+  end
+  
+  def set_default_back_cover(index = 0)
+    back_cover_url = get_back_cover(index)
+    self.update_attributes(:back_cover_image => open(back_cover_url)) if back_cover_url
+  end
+  
+    
+  def get_front_cover(index = 0)
+    all_front_covers[index]
+  end
+  
+  def get_back_cover(index = 0)
+    all_back_covers[index]
   end
   
   def all_back_covers
-    begin
-    cover_art.select{|image| image.type == "secondary"}.map{|cover| cover.uri}.compact
-    rescue NoMethodError
-      nil
-    end
+    cover_art.select{|image| image.try(:type) == "secondary"}.map{|cover| cover.try(:uri)}.compact
   end
   
   def all_front_covers
-    begin
-      cover_art.select{|image| image.type == "primary"}.map{|cover| cover.uri}.compact
-    rescue NoMethodError
-      nil
-    end
+    cover_art.select{|image| image.try(:type) == "primary"}.map{|cover| cover.try(:uri)}.compact
+  end
+  
+  def set_tracks!
+    self.tracks.each{|track| track.destroy }
+    tracklist.each{|track| self.tracks.create(title: track["title"], position: track["position"])}
   end
       
   private
-    def track_data
-      tracks_hash_array = JSON.parse(open("http://musicbrainz.org/ws/2/release/#{self.mb_id}?inc=recordings&fmt=json").read)["media"][0]["tracks"]
-      tracks = tracks_hash_array.map do |track_hash|
-        track_hash["title"]
-      end
-      tracks.compact
-    end
+
+  def set_tracks
+    tracklist.each{|track| self.tracks.create(title: track["title"], position: track["position"])}
+  end
   
-    def set_tracks
-      self.tracks.each{|track| track.destroy }
-      track_data.each_with_index{|track, i| self.tracks.create(title: track, position: i+1)}
-    end
-  
+end
+
+class CannotFindCover < Exception 
 end

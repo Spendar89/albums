@@ -12,7 +12,8 @@ module Youtube
     end
   
     def yt_id
-      results.videos.first.video_id.split(":").last
+      video_id = results.videos.first.try(:video_id)
+      video_id.split(":").last if video_id
     end
   end
 end

@@ -1,0 +1,5 @@
+$("#change-<%=@side%>-button").attr('href', "/albums/<%=@album.id%>/change_cover?index=<%=@index+1%>&side=<%=@side%>");
+$("#<%=@side%>-cover-image").attr('src', "<%=@src%>");
+<% if @errors %>
+  $("#change-<%=@side%>-button").addClass("disabled")
+<% end %>

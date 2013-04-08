@@ -1,17 +1,40 @@
 require 'net/http'
 require 'open-uri'
+require 'discogs'
 class Artist < ActiveRecord::Base
   attr_accessible :mb_id, :name
-  after_create do
-    set_mb_id
-  end
     
   has_many :albums
+  validate :artist_must_be_in_discogs
   
-  def set_albums(album_title)
-    album_hash_array = JSON.parse(open("http://musicbrainz.org/ws/2/artist/#{mb_id}?inc=releases&fmt=json").read)["releases"]
-    matching_album = album_hash_array.select{|album_hash| album_hash["title"] == album_title }.first
-    album = self.albums.create(:title => matching_album["title"], :artist_name => name, :mb_id => matching_album["id"], :in_collection => true)
+  # def cover_art
+  #   wrapper = Discogs::Wrapper.new("albums")
+  #   artist_name = self.artist_name
+  #   artist_name = "#{artist_name[4..-1]}, the" if artist_name.split(" ").first.downcase == "the"
+  #   all_releases = wrapper.get_artist(artist_name).main_releases
+  #   release = all_releases.select{|release| release.title == self.title}.first
+  #   return unless release
+  #   release_id = release.main_release
+  #   wrapper.get_release(release_id).images if release_id
+  # end
+  
+  def discogs_name
+    JSON.parse(open("http://api.discogs.com/database/search?type=artist&q=#{CGI::escape(name)}").read)["results"][0]["title"]
+  end
+  
+  def albums!
+    Discogs::Wrapper.new("albums").get_artist(discogs_name).main_releases
+  end
+  
+  def artist_must_be_in_discogs
+    results = JSON.parse(open("http://api.discogs.com/database/search?type=artist&q=#{CGI::escape(discogs_name)}").read)["results"]
+    errors.add(:name, "Cannot Find Artist") if results.empty?
+  end
+  
+  def set_album(album_title)
+    matching_album = albums!.select{|release| release.title == album_title}.first
+    raise CannotFindAlbum, "No Matching Albums" unless matching_album
+    album = self.albums.create(:title => matching_album.title, :artist_name => name, :in_collection => true)
     album
   end
   
@@ -21,4 +44,8 @@ class Artist < ActiveRecord::Base
       self.update_attribute(:mb_id, mb_id)
     end
   
+end
+
+
+class CannotFindAlbum < Exception 
 end
