@@ -70,7 +70,10 @@ class Album < ActiveRecord::Base
   def get_review
     rovi_api_key = ENV['ROVI_API_KEY']
     hash = JSON.parse(open("http://api.rovicorp.com/data/v1/album/primaryreview?album=#{title.gsub(' ', '+')}&country=US&language=en&format=json&apikey=#{rovi_api_key}&sig=#{rovi_md5}").read)
-    hash["primaryReview"]["text"].gsub(/\[\/{0,1}roviLink.{0,20}\]/, "")
+    hash["primaryReview"]["text"].gsub(/\[\/{0,1}roviLink.{0,20}\]/, "") if hash["primaryReview"]
+    escape OpenURI::HTTPError
+      return nil
+    end
   end
   
   def has_description?(result)
