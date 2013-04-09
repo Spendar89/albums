@@ -10,8 +10,8 @@ class AlbumsController < ApplicationController
     @artist = Artist.find_or_create_by_name(:name => params[:artist_name][0])
     if @artist.id
       @album = @artist.set_album(params[:title][0])
-      @album.title
-      @album.set_default_covers
+      @album.try(:title)
+      @album.try(:set_default_covers)
     else
       flash[:notice] = "Cannot Find Artist"
       redirect_to new_album_path and return
