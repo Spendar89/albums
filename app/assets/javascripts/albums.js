@@ -128,7 +128,7 @@ function onPlayerReady(event) {
       player.pauseVideo();
       playButton.data("playing", false);
       trackStopWatch.pause();
-    else{
+    }else{
   		player.loadVideoById(nextYtId);
       trackStopWatch.pause();
   	  trackStopWatch.startSecs();
