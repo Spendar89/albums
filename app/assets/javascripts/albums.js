@@ -95,7 +95,8 @@ function onPlayerReady(event) {
 				$(this).data("loaded", true);	
 			};
 			$(this).removeClass('icon-play').addClass('icon-pause');
-			trackStopWatch.startSecs();
+			trackStopWatch.pause();
+      trackStopWatch.startSecs();
 			trackStopWatch.startMins();
 			player.playVideo();
 			$(this).data("playing", true);
@@ -123,10 +124,13 @@ function onPlayerReady(event) {
 		}
 		var nextYtId = tracksArray[trackIndex]
 		player.loadVideoById(nextYtId);
+    trackStopWatch.pause();
 	  trackStopWatch.startSecs();
 	  trackStopWatch.startMins();
     if(player.getPlayerState() !== 1){
       player.pauseVideo();
+      playButton.data("playing", false);
+      trackStopWatch.pause();
     }
 	})
 	
@@ -143,10 +147,13 @@ function onPlayerReady(event) {
 		}
 		var prevYtId = tracksArray[trackIndex]
 		player.loadVideoById(prevYtId);
+    trackStopWatch.pause();
 		trackStopWatch.startSecs();
 		trackStopWatch.startMins();
     if(player.getPlayerState() !== 1){
       player.pauseVideo();
+      playButton.data("playing", false);
+      trackStopWatch.pause();
     }
 	})
 }
