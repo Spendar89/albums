@@ -172,6 +172,7 @@ var done = false;
 function onPlayerStateChange(event) {        
     if(event.data === 0) {          
       $('.icon-pause').siblings('.next-track').trigger('click');
+      $('.icon-pause').sibling('.play-track').trigger('click');
     }
 }
 function stopVideo() {

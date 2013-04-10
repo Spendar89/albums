@@ -84,6 +84,23 @@
 	 visibility:visible;
  }
  
+ .nav-controls i{
+   color: #b8b8b8;
+	 cursor: pointer;
+	 visibility: visible;
+   margin: 10px;
+   margin-top: 5px;
+ }
+ 
+ .nav-controls i:hover{
+   color: #ebebeb;
+ }
+ 
+ .nav-controls{
+    position: absolute;
+    right: 230px;
+ }
+ 
  .prev-track{
 	 margin-left: 345px;
  }

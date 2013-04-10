@@ -7,7 +7,7 @@ require 'digest/md5'
 
 
 class Album < ActiveRecord::Base
-  
+  attr_accessor :discogs_id, :master_id
   attr_accessible :genre, :release_date, :title, :album_art, :artist_name, :mb_id, :in_collection, :front_cover_image, :back_cover_image, :description
   has_many :tracks
   belongs_to :artist
@@ -31,7 +31,20 @@ class Album < ActiveRecord::Base
   
   def discogs_id
     hash = JSON.parse(open("http://api.discogs.com/database/search?type=releases&artist=#{CGI::escape(artist.discogs_name)}&release_title=#{CGI::escape(title)}").read)
-    hash["results"].first["id"]
+    result = hash["results"].first if hash
+    return @discogs_id ||= result["id"] if result
+    nil
+  end
+  
+  def master_id
+    r_id = @discogs_id ||= discogs_id
+    result = JSON.parse(open("http://api.discogs.com/releases/#{ r_id}").read)["master_id"] if r_id
+    return @master_id ||= result if result
+  end
+  
+  def all_version_ids
+    m_id = @master_id ||= master_id
+    JSON.parse(open("http://api.discogs.com/masters/#{m_id}/versions").read)["versions"].map{|v| v["id"]} if m_id
   end
   
   def artist
@@ -84,6 +97,17 @@ class Album < ActiveRecord::Base
   def cover_art
     wrapper = Discogs::Wrapper.new("albums")
     wrapper.get_release(discogs_id).try(:images)
+  end
+  
+  def all_version_cover_art
+    wrapper = Discogs::Wrapper.new("albums")
+    if all_version_ids
+      ids ||= all_version_ids.map do |version_id| 
+        image_array = wrapper.get_release(version_id).try(:images)
+        image_array.map(&:uri) if image_array
+      end
+      ids.flatten.compact
+    end
   end
   
   def set_covers_from_urls(front_url, back_url)
