@@ -123,7 +123,7 @@ function onPlayerReady(event) {
 			playButton.data('position', trackIndex);
 		}
 		var nextYtId = tracksArray[trackIndex]
-    if(player.getPlayerState() !== 1 && !== 0){
+    if(player.getPlayerState() !== 1 && player.getPlayerState() !== 0){
       player.loadVideoById(nextYtId);
       player.pauseVideo();
       playButton.data("playing", false);
