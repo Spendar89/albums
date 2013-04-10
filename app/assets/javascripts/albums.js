@@ -123,14 +123,16 @@ function onPlayerReady(event) {
 			playButton.data('position', trackIndex);
 		}
 		var nextYtId = tracksArray[trackIndex]
-		player.loadVideoById(nextYtId);
-    trackStopWatch.pause();
-	  trackStopWatch.startSecs();
-	  trackStopWatch.startMins();
     if(player.getPlayerState() !== 1){
+      player.loadVideoById(nextYtId);
       player.pauseVideo();
       playButton.data("playing", false);
       trackStopWatch.pause();
+    }else{
+  		player.loadVideoById(nextYtId);
+      trackStopWatch.pause();
+  	  trackStopWatch.startSecs();
+  	  trackStopWatch.startMins();
     }
 	})
 	
