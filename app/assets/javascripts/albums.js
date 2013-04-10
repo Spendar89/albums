@@ -123,16 +123,18 @@ function onPlayerReady(event) {
 		}
 		var nextYtId = tracksArray[trackIndex]
 		player.loadVideoById(nextYtId);
-		trackStopWatch.startSecs();
-		trackStopWatch.startMins();
+	  trackStopWatch.startSecs();
+	  trackStopWatch.startMins();
+    if(player.getPlayerState() !== 1){
+      player.pauseVideo();
+    }
 	})
 	
 	$(".prev-track").click(function(){
 		var playButton = $(this).siblings('.play-track');
 		var tracksArray = playButton.data('tracks-array');
-		var trackIndex = playButton.data('position');
-		playButton.data('position', trackIndex - 1);
-		trackIndex -= 1
+		var trackIndex = playButton.data('position') - 1;
+		playButton.data('position', trackIndex );
 		$('#lcd-position').text("0"+(trackIndex + 1));
 		trackStopWatch.restart();
 		if(trackIndex < 0){
@@ -143,6 +145,9 @@ function onPlayerReady(event) {
 		player.loadVideoById(prevYtId);
 		trackStopWatch.startSecs();
 		trackStopWatch.startMins();
+    if(player.getPlayerState() !== 1){
+      player.pauseVideo();
+    }
 	})
 }
 
