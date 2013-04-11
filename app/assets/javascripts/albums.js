@@ -130,6 +130,7 @@ function onPlayerReady(event) {
       trackStopWatch.pause();
     }else{
   		player.loadVideoById(nextYtId);
+      $(this).data("playing", true);
       trackStopWatch.pause();
   	  trackStopWatch.startSecs();
   	  trackStopWatch.startMins();
@@ -155,6 +156,7 @@ function onPlayerReady(event) {
       trackStopWatch.pause();
     }else{
   		player.loadVideoById(prevYtId);
+      $(this).data("playing", true);
       trackStopWatch.pause();
   	  trackStopWatch.startSecs();
   	  trackStopWatch.startMins();
