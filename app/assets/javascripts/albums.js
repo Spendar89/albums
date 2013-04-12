@@ -112,31 +112,35 @@ function onPlayerReady(event) {
 	$(".next-track").click(function(){
 		var playButton = $(this).siblings('.play-track');
 		var tracksArray = playButton.data('tracks-array');
-		var trackIndex = playButton.data('position');
-		playButton.data('position', trackIndex + 1);
-		trackIndex += 1
-		$('#lcd-position').text("0"+(trackIndex + 1));
-		trackStopWatch.restart();
-		if(trackIndex > tracksArray.length - 1){
-      trackStopWatch.restart();
-      return 
-			trackIndex = tracksArray.length - 1;
+		var trackIndex = playButton.data('position') + 1;
+    if(trackIndex < 9 && trackIndex > 0){
+		  $('#lcd-position').text("0"+(trackIndex + 1));
+      playButton.data('position', trackIndex);
+    }else if(trackIndex >= 9 && trackIndex < parseInt(playButton.data('max-tracks'))){
+      $('#lcd-position').text(trackIndex + 1);
+       playButton.data('position', trackIndex);
+    }else{
+			trackIndex = 0;
+      $('#lcd-position').text("01");
 			playButton.data('position', trackIndex);
-		}
+    }
+    trackStopWatch.restart();
 		var nextYtId = tracksArray[trackIndex]
-    if(player.getPlayerState() !== 1 && player.getPlayerState() !== 0){
+    if(player.getPlayerState() == 2){
       player.loadVideoById(nextYtId);
       $.get("/tracks/"+nextYtId+"/count_play")
       player.pauseVideo();
       playButton.data("playing", false);
       trackStopWatch.pause();
+      playButton.removeClass('icon-pause').addClass('icon-play');
     }else{
   		player.loadVideoById(nextYtId);
       $.get("/tracks/"+nextYtId+"/count_play")
-      $(this).data("playing", true);
+      playButton.data("playing", true);
       trackStopWatch.pause();
   	  trackStopWatch.startSecs();
   	  trackStopWatch.startMins();
+      playButton.removeClass('icon-play').addClass('icon-pause');
     }
 	})
 	
@@ -144,27 +148,34 @@ function onPlayerReady(event) {
 		var playButton = $(this).siblings('.play-track');
 		var tracksArray = playButton.data('tracks-array');
 		var trackIndex = playButton.data('position') - 1;
-		playButton.data('position', trackIndex );
-		$('#lcd-position').text("0"+(trackIndex + 1));
-		trackStopWatch.restart();
-		if(trackIndex < 0){
+    if(trackIndex <= 9 && trackIndex > 0){
+		  $('#lcd-position').text("0"+(trackIndex + 1));
+      playButton.data('position', trackIndex );
+    }else if(trackIndex > 9 && trackIndex < parseInt(playButton.data('max-tracks'))){
+      $('#lcd-position').text((trackIndex + 1));
+      playButton.data('position', trackIndex );
+    }else{
 			trackIndex = 0;
+      $('#lcd-position').text("01");
 			playButton.data('position', trackIndex);
-		}
+    }
+		trackStopWatch.restart();
 		var prevYtId = tracksArray[trackIndex]
-    if(player.getPlayerState() !== 1){
+    if(player.getPlayerState() == 2){
       player.loadVideoById(prevYtId);
       $.get("/tracks/"+prevYtId+"/count_play")
       player.pauseVideo();
       playButton.data("playing", false);
       trackStopWatch.pause();
+      playButton.removeClass('icon-pause').addClass('icon-play');
     }else{
   		player.loadVideoById(prevYtId);
       $.get("/tracks/"+prevYtId+"/count_play");
-      $(this).data("playing", true);
+      playButton.data("playing", true);
       trackStopWatch.pause();
   	  trackStopWatch.startSecs();
   	  trackStopWatch.startMins();
+      playButton.removeClass('icon-play').addClass('icon-pause');
     } 
 	})
 }
