@@ -113,6 +113,16 @@ function onPlayerReady(event) {
 		var playButton = $(this).siblings('.play-track');
 		var tracksArray = playButton.data('tracks-array');
 		var trackIndex = playButton.data('position');
+		playButton.data('position', trackIndex + 1);
+		trackIndex += 1
+		$('#lcd-position').text("0"+(trackIndex + 1));
+		trackStopWatch.restart();
+		if(trackIndex > tracksArray.length - 1){
+      trackStopWatch.restart();
+      return 
+			trackIndex = tracksArray.length - 1;
+			playButton.data('position', trackIndex);
+		}
 		var nextYtId = tracksArray[trackIndex]
     if(player.getPlayerState() !== 1 && player.getPlayerState() !== 0){
       player.loadVideoById(nextYtId);
@@ -150,13 +160,12 @@ function onPlayerReady(event) {
       trackStopWatch.pause();
     }else{
   		player.loadVideoById(prevYtId);
-      $.get("/tracks/"+prevYtId+"/count_play")
+      $.get("/tracks/"+prevYtId+"/count_play");
       $(this).data("playing", true);
       trackStopWatch.pause();
   	  trackStopWatch.startSecs();
   	  trackStopWatch.startMins();
-    }
-    
+    } 
 	})
 }
 
