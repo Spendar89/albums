@@ -2,6 +2,7 @@ class Track < ActiveRecord::Base
   attr_accessible :album_id, :position, :title, :yt_id
   belongs_to :album
   before_create :set_yt_id
+  is_impressionable
   
   def set_yt_id(title_terms = nil, attempt = 1)
       title_terms ||= title

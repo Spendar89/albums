@@ -92,6 +92,7 @@ function onPlayerReady(event) {
 				var tracksArray = $(this).data('tracks-array');
 				yt_id = tracksArray[0]
 				player.loadVideoById(yt_id);
+        $.get("/tracks/"+yt_id+"/count_play")
 				$(this).data("loaded", true);	
 			};
 			$(this).removeClass('icon-play').addClass('icon-pause');
@@ -112,24 +113,16 @@ function onPlayerReady(event) {
 		var playButton = $(this).siblings('.play-track');
 		var tracksArray = playButton.data('tracks-array');
 		var trackIndex = playButton.data('position');
-		playButton.data('position', trackIndex + 1);
-		trackIndex += 1
-		$('#lcd-position').text("0"+(trackIndex + 1));
-		trackStopWatch.restart();
-		if(trackIndex > tracksArray.length - 1){
-      trackStopWatch.restart();
-      return 
-			trackIndex = tracksArray.length - 1;
-			playButton.data('position', trackIndex);
-		}
 		var nextYtId = tracksArray[trackIndex]
     if(player.getPlayerState() !== 1 && player.getPlayerState() !== 0){
       player.loadVideoById(nextYtId);
+      $.get("/tracks/"+nextYtId+"/count_play")
       player.pauseVideo();
       playButton.data("playing", false);
       trackStopWatch.pause();
     }else{
   		player.loadVideoById(nextYtId);
+      $.get("/tracks/"+nextYtId+"/count_play")
       $(this).data("playing", true);
       trackStopWatch.pause();
   	  trackStopWatch.startSecs();
@@ -151,11 +144,13 @@ function onPlayerReady(event) {
 		var prevYtId = tracksArray[trackIndex]
     if(player.getPlayerState() !== 1){
       player.loadVideoById(prevYtId);
+      $.get("/tracks/"+prevYtId+"/count_play")
       player.pauseVideo();
       playButton.data("playing", false);
       trackStopWatch.pause();
     }else{
   		player.loadVideoById(prevYtId);
+      $.get("/tracks/"+prevYtId+"/count_play")
       $(this).data("playing", true);
       trackStopWatch.pause();
   	  trackStopWatch.startSecs();

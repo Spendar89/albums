@@ -1,5 +1,9 @@
 Albums::Application.routes.draw do
-  resources :tracks
+  resources :tracks do
+    member do
+      match 'count_play'
+    end
+  end
 
 
   resources :albums do

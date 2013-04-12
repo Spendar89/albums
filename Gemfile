@@ -40,4 +40,6 @@ gem "discogs-wrapper"
 
 gem "htmlentities"
 
+gem 'impressionist'
+
 gem 'anjlab-bootstrap-rails', '>= 2.3', :require => 'bootstrap-rails'

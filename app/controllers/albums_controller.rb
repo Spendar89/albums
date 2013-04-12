@@ -68,4 +68,5 @@ class AlbumsController < ApplicationController
   def index
     @albums = Album.where(in_collection: true).order(:created_at).reverse
   end
+  
 end
