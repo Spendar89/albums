@@ -27,53 +27,10 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-function stopWatch(){
-	var mins = 0;
-	var secs = 0;
-	var minsCounter;
-	var secsCounter;
-	
-	this.restart = function(){
-		mins = 0;
-		secs = 0;
-		$("#lcd-minutes").text("00");
-		$("#lcd-seconds").text("00");
-		clearInterval(minsCounter);
-		clearInterval(secsCounter);
-	};
-
-	
-	this.startMins = function(){
-		minsCounter = setInterval(function() {
-			mins += 1;
-			$("#lcd-minutes").text("0" + mins);
-		}, 60000);
-	};
-	
-	this.startSecs = function(){
-		secsCounter = setInterval(function(){
-			secs += 1;
-			if(secs < 10){
-				$("#lcd-seconds").text("0" + secs);
-			}else if(secs > 59){
-				$("#lcd-seconds").text("00");
-				secs = 0
-			}else{
-				$("#lcd-seconds").text(secs);
-			}
-		}, 1000);
-	};
-	
-	this.pause = function(){
-		clearInterval(minsCounter);
-		clearInterval(secsCounter);
-	};
-}
-
 // 4. The API will call this function when the video player is ready.
 function onPlayerReady(event) {
 	var player = event.target;
-	trackStopWatch = new stopWatch();
+	stopWatch = new StopWatch();
 	$('.play-track').click(function(){
     var title = $(this).data("title");
     var artist = $(this).data("artist");
@@ -88,7 +45,7 @@ function onPlayerReady(event) {
 					$(this).removeClass('icon-pause').addClass('icon-play');
 					$('#lcd-position').text( "01");
 				});
-				trackStopWatch.restart();
+				stopWatch.restart();
 				var tracksArray = $(this).data('tracks-array');
 				yt_id = tracksArray[0]
 				player.loadVideoById(yt_id);
@@ -96,16 +53,14 @@ function onPlayerReady(event) {
 				$(this).data("loaded", true);	
 			};
 			$(this).removeClass('icon-play').addClass('icon-pause');
-			trackStopWatch.pause();
-      trackStopWatch.startSecs();
-			trackStopWatch.startMins();
+			stopWatch.play();
 			player.playVideo();
 			$(this).data("playing", true);
 		}else{
 			$(this).data("playing", false);
 			$(this).removeClass('icon-pause').addClass('icon-play');
 			player.pauseVideo();
-			trackStopWatch.pause();
+			stopWatch.pause();
 		}
 	});
 	
@@ -124,22 +79,20 @@ function onPlayerReady(event) {
       $('#lcd-position').text("01");
 			playButton.data('position', trackIndex);
     }
-    trackStopWatch.restart();
+    stopWatch.restart();
 		var nextYtId = tracksArray[trackIndex]
     if(player.getPlayerState() == 2){
       player.loadVideoById(nextYtId);
       $.get("/tracks/"+nextYtId+"/count_play")
       player.pauseVideo();
       playButton.data("playing", false);
-      trackStopWatch.pause();
+      stopWatch.pause();
       playButton.removeClass('icon-pause').addClass('icon-play');
     }else{
   		player.loadVideoById(nextYtId);
       $.get("/tracks/"+nextYtId+"/count_play")
       playButton.data("playing", true);
-      trackStopWatch.pause();
-  	  trackStopWatch.startSecs();
-  	  trackStopWatch.startMins();
+      stopWatch.play();
       playButton.removeClass('icon-play').addClass('icon-pause');
     }
 	})
@@ -159,22 +112,20 @@ function onPlayerReady(event) {
       $('#lcd-position').text("01");
 			playButton.data('position', trackIndex);
     }
-		trackStopWatch.restart();
+		stopWatch.restart();
 		var prevYtId = tracksArray[trackIndex]
     if(player.getPlayerState() == 2){
       player.loadVideoById(prevYtId);
       $.get("/tracks/"+prevYtId+"/count_play")
       player.pauseVideo();
       playButton.data("playing", false);
-      trackStopWatch.pause();
+      stopWatch.pause();
       playButton.removeClass('icon-pause').addClass('icon-play');
     }else{
   		player.loadVideoById(prevYtId);
       $.get("/tracks/"+prevYtId+"/count_play");
       playButton.data("playing", true);
-      trackStopWatch.pause();
-  	  trackStopWatch.startSecs();
-  	  trackStopWatch.startMins();
+      stopWatch.play();
       playButton.removeClass('icon-play').addClass('icon-pause');
     } 
 	})

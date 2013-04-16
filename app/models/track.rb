@@ -10,5 +10,4 @@ class Track < ActiveRecord::Base
       return self.yt_id = search_result if search_result 
       set_yt_id(title_terms.split("(")[0], 2) unless attempt == 2
   end
-  
 end
