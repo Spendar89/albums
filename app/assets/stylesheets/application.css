@@ -170,3 +170,8 @@
    height: 100%;
    width: 100%;
  }
+ 
+ .cover-loader{
+   position: absolute;
+   display: none;
+ }

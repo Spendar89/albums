@@ -34,7 +34,7 @@ class Artist < ActiveRecord::Base
   def set_album(album_title)
     matching_album = albums!.select{|release| release.title == album_title}.first
     raise CannotFindAlbum, "No Matching Albums" unless matching_album
-    album = self.albums.create(:title => matching_album.title, :artist_name => name, :in_collection => true)
+    album = self.albums.find_or_create_by_title(matching_album.title, :artist_name => name, :in_collection => true)
     album
   end
   

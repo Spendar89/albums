@@ -12,7 +12,7 @@ class AlbumsController < ApplicationController
     @album.title
     @album.set_default_covers
     rescue CannotFindAlbum, CannotFindCover, NoMethodError => e
-      if e == CannotFindAlbum || e == NoMethodError
+      if e != CannotFindCover
         flash[:notice] = "Cannot Find Album"
         redirect_to new_album_path and return
       end

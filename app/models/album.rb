@@ -5,10 +5,9 @@ require 'wikipedia'
 require 'nokogiri'
 require 'digest/md5'
 
-
 class Album < ActiveRecord::Base
   attr_accessor :discogs_id, :master_id
-  attr_accessible :genre, :release_date, :title, :album_art, :artist_name, :mb_id, :in_collection, :front_cover_image, :back_cover_image, :description
+  attr_accessible :genre, :release_date, :title, :album_art, :artist_name, :mb_id, :in_collection, :front_cover_image, :back_cover_image, :description, :saved_front_covers, :saved_back_covers
   has_many :tracks
   belongs_to :artist
   validates :title, :uniqueness => {:scope => :artist_id}
@@ -34,17 +33,6 @@ class Album < ActiveRecord::Base
     result = hash["results"].first if hash
     return @discogs_id ||= result["id"] if result
     nil
-  end
-  
-  def master_id
-    r_id = @discogs_id ||= discogs_id
-    result = JSON.parse(open("http://api.discogs.com/releases/#{ r_id}").read)["master_id"] if r_id
-    return @master_id ||= result if result
-  end
-  
-  def all_version_ids
-    m_id = @master_id ||= master_id
-    JSON.parse(open("http://api.discogs.com/masters/#{m_id}/versions").read)["versions"].map{|v| v["id"]} if m_id
   end
   
   def artist
@@ -99,15 +87,16 @@ class Album < ActiveRecord::Base
     wrapper.get_release(discogs_id).try(:images)
   end
   
-  def all_version_cover_art
-    wrapper = Discogs::Wrapper.new("albums")
-    if all_version_ids
-      ids ||= all_version_ids.map do |version_id| 
-        image_array = wrapper.get_release(version_id).try(:images)
-        image_array.map(&:uri) if image_array
-      end
-      ids.flatten.compact
-    end
+  def all_back_covers
+    return saved_back_covers.split(",") if saved_back_covers
+    @cover_art_helper ||= CoverArt.new(discogs_id)
+    @cover_art_helper.back_uris
+  end
+  
+  def all_front_covers
+    return saved_front_covers.split(",") if saved_front_covers
+    @cover_art_helper ||= CoverArt.new(discogs_id)
+    @cover_art_helper.front_uris
   end
   
   def set_covers_from_urls(front_url, back_url)
@@ -118,6 +107,7 @@ class Album < ActiveRecord::Base
   def set_default_covers
     set_default_front_cover
     set_default_back_cover
+    update_attributes(:saved_front_covers => all_front_covers.join(","), :saved_back_covers => all_back_covers.join(","))
   end
   
   def set_default_front_cover(index = 0)
@@ -130,21 +120,12 @@ class Album < ActiveRecord::Base
     self.update_attributes(:back_cover_image => open(back_cover_url)) if back_cover_url
   end
   
-    
   def get_front_cover(index = 0)
     all_front_covers[index]
   end
   
   def get_back_cover(index = 0)
     all_back_covers[index]
-  end
-  
-  def all_back_covers
-    cover_art.select{|image| image.try(:type) == "secondary"}.map{|cover| cover.try(:uri)}.compact
-  end
-  
-  def all_front_covers
-    cover_art.select{|image| image.try(:type) == "primary"}.map{|cover| cover.try(:uri)}.compact
   end
   
   def set_tracks!
