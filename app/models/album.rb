@@ -4,6 +4,7 @@ require 'discogs'
 require 'wikipedia'
 require 'nokogiri'
 require 'digest/md5'
+require 'cover_art_helper'
 
 class Album < ActiveRecord::Base
   attr_accessor :discogs_id, :master_id
@@ -89,13 +90,13 @@ class Album < ActiveRecord::Base
   
   def all_back_covers
     return saved_back_covers.split(",") if saved_back_covers
-    @cover_art_helper ||= CoverArt.new(discogs_id)
+    @cover_art_helper ||= CoverArtHelper.new(discogs_id)
     @cover_art_helper.back_uris
   end
   
   def all_front_covers
     return saved_front_covers.split(",") if saved_front_covers
-    @cover_art_helper ||= CoverArt.new(discogs_id)
+    @cover_art_helper ||= CoverArtHelper.new(discogs_id)
     @cover_art_helper.front_uris
   end
   

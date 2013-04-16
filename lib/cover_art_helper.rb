@@ -2,7 +2,7 @@ require 'net/http'
 require 'open-uri'
 require 'discogs'
 
-class CoverArt
+class CoverArtHelper
   def initialize(discogs_id)
     @discogs_id = discogs_id
     @master_id ||= get_master_id
