@@ -40,7 +40,7 @@ function StopWatch(){
     clearInterval(secsCounter);
   };
   
-  this.play = function(){
+  this.start = function(){
     clearInterval(minsCounter);
     clearInterval(secsCounter);
     this.startMins();
