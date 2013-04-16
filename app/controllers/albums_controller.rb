@@ -8,14 +8,9 @@ class AlbumsController < ApplicationController
   def preview
     begin
     @artist = Artist.find_or_create_by_name(:name => params[:artist_name][0])
-    if @artist.id
-      @album = @artist.set_album(params[:title][0])
-      @album.title
-      @album.set_default_covers
-    else
-      flash[:notice] = "Cannot Find Artist"
-      redirect_to new_album_path and return
-    end
+    @album = @artist.set_album(params[:title][0])
+    @album.title
+    @album.set_default_covers
     rescue CannotFindAlbum, CannotFindCover, NoMethodError => e
       if e == CannotFindAlbum || e == NoMethodError
         flash[:notice] = "Cannot Find Album"
