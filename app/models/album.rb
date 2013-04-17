@@ -12,7 +12,10 @@ class Album < ActiveRecord::Base
   has_many :tracks
   belongs_to :artist
   validates :title, :uniqueness => {:scope => :artist_id}
-  after_create do 
+  before_create do
+    set_discogs_id
+  end
+  after_create do
     set_tracks
     set_description
   end
@@ -29,11 +32,10 @@ class Album < ActiveRecord::Base
     medium: '500x500>'
   }
   
-  def discogs_id
-    hash = JSON.parse(open("http://api.discogs.com/database/search?type=releases&artist=#{CGI::escape(artist.discogs_name)}&release_title=#{CGI::escape(title)}").read)
+  def set_discogs_id
+    hash = JSON.parse(open("http://api.discogs.com/database/search?type=releases&artist=#{CGI::escape(artist_name)}&release_title=#{CGI::escape(title)}").read)
     result = hash["results"].first if hash
-    return @discogs_id ||= result["id"] if result
-    nil
+    self.discogs_id = result["id"] if result
   end
   
   def artist
@@ -42,19 +44,6 @@ class Album < ActiveRecord::Base
   
   def tracklist
     JSON.parse(open("http://api.discogs.com/releases/#{discogs_id}").read)["tracklist"]
-  end
-  
-  def get_result
-    q = CGI::escape("#{title.gsub(' ','_')}")
-    first = JSON.parse(open("http://en.wikipedia.org/w/api.php?format=json&action=parse&page=#{q}&prop=text&section=0").read)
-    second =  JSON.parse(open("http://en.wikipedia.org/w/api.php?format=json&action=parse&page=#{q}_(album)&prop=text&section=0").read)
-    return first["parse"]["text"]["*"] if has_description?(first)
-    return second["parse"]["text"]["*"] if has_description?(second)
-  end
-  
-  def get_description
-    result = get_result
-    Nokogiri::HTML(result).css("p").text.split(".")[0...-1].join(".") + "." if result
   end
   
   def set_description
@@ -75,12 +64,6 @@ class Album < ActiveRecord::Base
     hash["primaryReview"]["text"].gsub(/\[\/{0,1}roviLink.{0,20}\]/, "") if hash["primaryReview"]
     rescue OpenURI::HTTPError
       return nil
-  end
-  
-  def has_description?(result)
-    unless result["error"]
-      true unless result["parse"]["text"]["*"].include?("NOTBROKEN") 
-    end
   end
   
   def cover_art

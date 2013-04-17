@@ -10,7 +10,7 @@ class AlbumsController < ApplicationController
     @artist = Artist.find_or_create_by_name(:name => params[:artist_name][0])
     @album = @artist.set_album(params[:title][0])
     @album.title
-    @album.set_default_covers
+    @album.set_default_covers unless @album.saved_front_covers && @album.saved_back_covers
     rescue CannotFindAlbum, CannotFindCover, NoMethodError => e
       if e != CannotFindCover
         flash[:notice] = "Cannot Find Album"

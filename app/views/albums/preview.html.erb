@@ -8,27 +8,31 @@
     <% if @album.front_cover_image.exists? %>
       <%= image_tag "ajax-loader.gif", :class => "cover-loader cover-loader-front" %>
       <%= image_tag(@album.front_cover_image.url, :width => "500", :id => "front-cover-image")%>
-      <%= link_to "next", change_cover_album_path(@album, :index => 0, :side => "front"), :id => "change-front-button", :class => "btn btn-secondary", :remote => "true", :onclick => "$('.cover-loader-front').show()" %>
+      <br/><br/>
+      <%= link_to "prev", change_cover_album_path(@album, :index => -1, :side => "front"), :id => "change-front-button-prev", :class => "btn btn-secondary", :remote => "true", :onclick => "$('.cover-loader-front').show()" %>
+      <%= link_to "next", change_cover_album_path(@album, :index => 1, :side => "front"), :id => "change-front-button-next", :class => "btn btn-secondary", :remote => "true", :onclick => "$('.cover-loader-front').show()" %>
     <% else %>
       <p> No Image Found </p>
     <% end %>
     <h5>Default Back Cover</h5>
     <% if @album.back_cover_image.exists? %>
-      <%= image_tag "ajax-loader.gif", :class => "cover-loader cover-loader-front" %>
+      <%= image_tag "ajax-loader.gif", :class => "cover-loader cover-loader-back" %>
       <%= image_tag(@album.back_cover_image.url, :width => "500", :id => "back-cover-image") %>
-      <%= link_to "next", change_cover_album_path(@album, :index => 0, :side => "back"), :id => "change-back-button", :class => "btn btn-secondary",  :remote => "true", :onclick => "$('.cover-loader-front').show()" %>
+      <br/><br/>
+      <%= link_to "prev", change_cover_album_path(@album, :index => -1, :side => "back"), :id => "change-back-button-prev", :class => "btn btn-secondary",  :remote => "true", :onclick => "$('.cover-loader-back').show()" %>
+      <%= link_to "next", change_cover_album_path(@album, :index => 1, :side => "back"), :id => "change-back-button-next", :class => "btn btn-secondary",  :remote => "true", :onclick => "$('.cover-loader-back').show()" %>
     <% else %>
+    
       <p> No Image Found </p>
     <% end %>
   </div>
+   <h5>Set Covers From Url</h5>
    <%= form_tag "/albums", :method => :post do  %>
       <%= hidden_field_tag :artist_id, @album.artist_id %>
       <%= hidden_field_tag :album_id, @album.id %>
-      <%= label_tag :change_front_cover_image %><br />
-      <%= text_field_tag :front_cover_url %><br/>
-      <%= label_tag :change_back_cover_image %><br />
-      <%= text_field_tag :back_cover_url %><br/>
-  		<%= submit_tag %>
+      <%= text_field_tag :front_cover_url, nil, :placeholder => "front cover url" %>
+      <%= text_field_tag :back_cover_url, nil, :placeholder => "back cover url" %><br/>
+  		<%= submit_tag "Create Album", :class => "btn btn-secondary" %>
   	<% end %>
   </div>
 </div>

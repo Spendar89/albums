@@ -1,4 +1,5 @@
-$("#change-<%=@side%>-button").attr('href', "/albums/<%=@album.id%>/change_cover?index=<%=@index+1%>&side=<%=@side%>");
+$("#change-<%=@side%>-button-prev").attr('href', "/albums/<%=@album.id%>/change_cover?index=<%=@index - 1%>&side=<%=@side%>&direction=prev");
+$("#change-<%=@side%>-button-next").attr('href', "/albums/<%=@album.id%>/change_cover?index=<%=@index + 1%>&side=<%=@side%>&direction=next");
 $("#<%=@side%>-cover-image").attr('src', "<%=@src%>");
 $(".cover-loader").hide();
 <% if @errors %>
