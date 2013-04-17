@@ -82,6 +82,9 @@ function onPlayerStateChange(event) {
     if(event.data === -1){
       stopWatch.restart();
     }
+    if(event.data === 3){
+      stopWatch.pause();
+    }
 }
 
 function rotateAlbums(){
