@@ -16,7 +16,7 @@
 
  body{
 	 background: url("record_store.jpg");
-	 background-size: cover;
+	 background-size: 100%;
  }
  
  .albums-container{
@@ -174,4 +174,18 @@
  .cover-loader{
    position: absolute;
    display: none;
+ }
+ 
+ .album-result{
+   color: white; 
+   text-shadow: 2px 2px black; 
+   text-decoration: none; 
+   font-size: 20pt; 
+   font-weight: bold;
+ }
+ 
+ .album-result:hover{
+   color: #94b7fb;
+   text-decoration: none;
+   text-shadow: 2px 2px grey; 
  }

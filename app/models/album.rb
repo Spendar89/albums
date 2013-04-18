@@ -8,13 +8,10 @@ require 'cover_art_helper'
 
 class Album < ActiveRecord::Base
   attr_accessor :discogs_id, :master_id
-  attr_accessible :genre, :release_date, :title, :album_art, :artist_name, :mb_id, :in_collection, :front_cover_image, :back_cover_image, :description, :saved_front_covers, :saved_back_covers
+  attr_accessible :genre, :release_date, :title, :album_art, :artist_name, :mb_id, :in_collection, :front_cover_image, :back_cover_image, :description, :saved_front_covers, :saved_back_covers, :discogs_id
   has_many :tracks
   belongs_to :artist
   validates :title, :uniqueness => {:scope => :artist_id}
-  before_create do
-    set_discogs_id
-  end
   after_create do
     set_tracks
     set_description

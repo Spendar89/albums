@@ -15,6 +15,8 @@ Albums::Application.routes.draw do
     end
   end
   
+  resources :artists do
+  end
 
   root :to => 'albums#index'
 

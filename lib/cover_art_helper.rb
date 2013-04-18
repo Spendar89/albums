@@ -12,11 +12,11 @@ class CoverArtHelper
   end
   
   def get_master_id
-    JSON.parse(open("http://api.discogs.com/releases/#{ @discogs_id}").read)["master_id"]
+    JSON.parse(open("http://api.discogs.com/releases/#{@discogs_id}").read)["master_id"]
   end
   
   def get_all_version_urls
-    JSON.parse(open("http://api.discogs.com/masters/#{@master_id}/versions").read)["versions"].map{|v| v["resource_url"]}.compact
+    JSON.parse(open("http://api.discogs.com/masters/#{@master_id}/versions").read)["versions"].map{|v| v["resource_url"]}.try(:compact)
   rescue
     return nil
   end
@@ -35,11 +35,11 @@ class CoverArtHelper
   end
   
   def back_uris
-    @all.try(:map){|image| (image["uri"] if image["type"] != "primary") if image}.compact
+    @all.try(:map){|image| (image["uri"] if image["type"] != "primary") if image}.try(:compact)
   end
   
   def front_uris
-    @all.try(:map){|image| (image["uri"] if image["type"] == "primary") if image}.compact
+    @all.try(:map){|image| (image["uri"] if image["type"] == "primary") if image}.try(:compact)
   end
   
 end

@@ -2,13 +2,17 @@
 	<%= flash[:notice] %>
 </div>
 <div class="new-container" style="margin-top: 8%">
-  <div class ="form" style="margin: 5%">
-  	<%= form_tag preview_albums_path, :method => :post do  %>
-  		<%= text_field :title, "", :placeholder => "Title" %><br/>
+  <div class ="form" style="margin: 2%">
+  	<%= form_tag artists_path, :method => :post, :remote => true do  %>
+  		<!-- <%= text_field :title, "", :placeholder => "Title" %><br/> -->
   		<%= text_field :artist_name, "", :placeholder => "Artist" %><br/>
   		<%= submit_tag %>
   	<% end %>
   </div>
 </div>
 
+<div class="album-results-div" style="margin: 2%; height: 600px; overflow: scroll;">
+</div>
+
 <%= @youtube %>
+

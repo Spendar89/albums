@@ -1,0 +1,5 @@
+<% if @errors %>
+  $('.album-results-div').html("<h2 style='color: white'>Cannot Find Artist</h2");
+<% else %>
+$('.album-results-div').html("<%=j render :partial => 'album_results', :locals => {:albums_list => @albums_list} %>");
+<% end %>

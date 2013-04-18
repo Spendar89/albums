@@ -1,0 +1,3 @@
+<% albums_list.each do |a| %>
+  <p><%=link_to a[:title], preview_albums_path(:title => a[:title], :artist_name => @artist.name, :discogs_id => a[:release_id]), :method => :post , :class => "album-result"%></p>
+<% end %>

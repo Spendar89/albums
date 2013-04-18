@@ -6,17 +6,9 @@ class AlbumsController < ApplicationController
   end
   
   def preview
-    begin
-    @artist = Artist.find_or_create_by_name(:name => params[:artist_name][0])
-    @album = @artist.set_album(params[:title][0])
-    @album.title
+    @artist = Artist.find_or_create_by_name(:name => params[:artist_name])
+    @album = @artist.set_album(params[:title], params[:discogs_id])
     @album.set_default_covers unless @album.saved_front_covers && @album.saved_back_covers
-    rescue CannotFindAlbum, CannotFindCover, NoMethodError => e
-      if e != CannotFindCover
-        flash[:notice] = "Cannot Find Album"
-        redirect_to new_album_path and return
-      end
-    end
   end
   
   def change_cover
