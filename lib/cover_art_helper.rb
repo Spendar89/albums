@@ -3,6 +3,7 @@ require 'open-uri'
 require 'discogs'
 
 class CoverArtHelper
+  attr_accessor :all, :all_version_urls
   def initialize(discogs_id)
     @discogs_id = discogs_id
     @master_id ||= get_master_id
@@ -26,13 +27,22 @@ class CoverArtHelper
   end
     
   def get_all
+    hydra = Typhoeus::Hydra.new
     return unless @all_version_urls
-    @all_version_urls.map { |version_url|
-      images = image_array(version_url).try(:map){ |image|
-        image
-      }
-    }.flatten.compact
+    reqs = @all_version_urls.map { |version_url| Typhoeus::Request.new(version_url) }
+    reqs.each{ |request| hydra.queue(request) }
+    hydra.run
+    reqs.map{|r| JSON.parse(r.response.response_body)["images"]}.flatten.compact
   end
+  
+  # def get_all
+  #   return unless @all_version_urls
+  #   @all_version_urls.map { |version_url|
+  #     images = image_array(version_url).try(:map){ |image|
+  #       image
+  #     }
+  #   }.flatten.compact
+  # end
   
   def back_uris
     @all.try(:map){|image| (image["uri"] if image["type"] != "primary") if image}.try(:compact)

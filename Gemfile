@@ -44,4 +44,6 @@ gem 'impressionist'
 
 gem 'jquery-tokeninput-rails'
 
+gem 'typhoeus'
+
 gem 'anjlab-bootstrap-rails', '>= 2.3', :require => 'bootstrap-rails'

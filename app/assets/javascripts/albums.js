@@ -130,7 +130,8 @@ $(document).ready(function(){
       $("#artist_search").tokenInput("/artists/search", {
         tokenLimit: 1, 
         tokenValue: 'name',
-        onAdd: function(){
+        onAdd: function(item){
+          $('#artist_discogs_id').val(item.id);
           $('.albums-ajax-spinner').show();
           $('#artist_submit').trigger('click');
         }});

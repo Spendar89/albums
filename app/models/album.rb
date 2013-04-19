@@ -7,11 +7,14 @@ require 'digest/md5'
 require 'cover_art_helper'
 
 class Album < ActiveRecord::Base
-  attr_accessor :discogs_id, :master_id
+  attr_accessor :master_id
   attr_accessible :genre, :release_date, :title, :album_art, :artist_name, :mb_id, :in_collection, :front_cover_image, :back_cover_image, :description, :saved_front_covers, :saved_back_covers, :discogs_id
   has_many :tracks
   belongs_to :artist
   validates :title, :uniqueness => {:scope => :artist_id}
+  before_create do
+    set_discogs_id
+  end
   after_create do
     set_tracks
     set_description
@@ -33,6 +36,12 @@ class Album < ActiveRecord::Base
     hash = JSON.parse(open("http://api.discogs.com/database/search?type=releases&artist=#{CGI::escape(artist_name)}&release_title=#{CGI::escape(title)}").read)
     result = hash["results"].first if hash
     self.discogs_id = result["id"] if result
+  end
+  
+  def set_discogs_id!
+    hash = JSON.parse(open("http://api.discogs.com/database/search?type=releases&artist=#{CGI::escape(artist_name)}&release_title=#{CGI::escape(title)}").read)
+    result = hash["results"].first if hash
+    update_attributes(:discogs_id => result["id"]) if result
   end
   
   def artist

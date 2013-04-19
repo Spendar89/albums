@@ -2,7 +2,7 @@ require 'net/http'
 require 'open-uri'
 require 'discogs'
 class Artist < ActiveRecord::Base
-  attr_accessible :mb_id, :name
+  attr_accessible :mb_id, :name, :discogs_id
     
   has_many :albums
   
@@ -11,11 +11,12 @@ class Artist < ActiveRecord::Base
   end
   
   def albums!
-    Discogs::Wrapper.new("albums").get_artist(name).main_releases
+    JSON.parse(open("http://api.discogs.com/artists/#{discogs_id}/releases").read)["releases"]
+    # Discogs::Wrapper.new("albums").get_artist(name).main_releases
   end
   
   def pretty_albums
-    albums!.map{|a| {:title => a.title, :release_id => a.main_release} if a.main_release}.try(:compact)
+    albums!.map{|a| {:title => a["title"], :release_id => a["main_release"]} if a["main_release"]}.try(:compact)
   end
   
   def artist_must_be_in_discogs

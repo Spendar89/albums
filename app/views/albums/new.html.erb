@@ -6,7 +6,8 @@
   <div class ="form">
     <h1 style= "background: rgba(50,50,50,0.8); width: 200px; padding: 8px; text-align: center; font-family: 'Amatic SC', cursive; color: #a1b7ff; font-weight: bold">Search By Artist</h1>
   	<%= form_tag artists_path, :method => :post, :remote => true do  %>
-  		<%= text_field :artist_name, "", :placeholder => "Artist", :id => "artist_search" %><br/>
+      <%= hidden_field_tag :discogs_id, nil, :id => "artist_discogs_id" %>
+  		<%= text_field :artist_name, "", :id => "artist_search" %><br/>
   		<%= submit_tag nil, :id => "artist_submit", :class => "btn btn-secondary", :style => "visibility: hidden" %>
   	<% end %>
   </div>
