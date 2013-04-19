@@ -7,4 +7,9 @@ class ArtistsController < ApplicationController
       @errors = "Cannot Find Artist"
     end
   end
+  
+  def search
+    @artists = Artist.search(params[:q]).to_json
+    render :json => @artists
+  end
 end

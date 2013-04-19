@@ -42,4 +42,6 @@ gem "htmlentities"
 
 gem 'impressionist'
 
+gem 'jquery-tokeninput-rails'
+
 gem 'anjlab-bootstrap-rails', '>= 2.3', :require => 'bootstrap-rails'

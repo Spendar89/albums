@@ -16,6 +16,9 @@ Albums::Application.routes.draw do
   end
   
   resources :artists do
+    collection do
+      match 'search'
+    end
   end
 
   root :to => 'albums#index'

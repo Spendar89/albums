@@ -5,15 +5,13 @@ class Artist < ActiveRecord::Base
   attr_accessible :mb_id, :name
     
   has_many :albums
-  validate :artist_must_be_in_discogs
-
   
-  def discogs_name
-    JSON.parse(open("http://api.discogs.com/database/search?type=artist&q=#{CGI::escape(name)}").read)["results"][0]["title"]
+  def self.search(query)
+     JSON.parse(open("http://api.discogs.com/database/search?type=artist&q=#{CGI::escape(query)}").read)["results"].map{|a| {'id' => a['id'], 'name' => a['title']}}
   end
   
   def albums!
-    Discogs::Wrapper.new("albums").get_artist(discogs_name).main_releases
+    Discogs::Wrapper.new("albums").get_artist(name).main_releases
   end
   
   def pretty_albums

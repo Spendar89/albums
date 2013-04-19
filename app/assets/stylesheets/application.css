@@ -8,6 +8,7 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require token-input
  *= require twitter/bootstrap
  *= require font-awesome
  *= require_self
@@ -182,15 +183,32 @@
  }
  
  .album-result{
-   color: white; 
-   text-shadow: 2px 2px black; 
+   color: #f4836c;
+   /*text-shadow: 2px 2px black; */
    text-decoration: none; 
-   font-size: 20pt; 
+   font-size: 30pt; 
    font-weight: bold;
+   font-family: 'Amatic SC', cursive; 
  }
  
  .album-result:hover{
-   color: #94b7fb;
+   color: #f4836c;
    text-decoration: none;
-   text-shadow: 2px 2px grey; 
+ }
+ 
+ .result-div{
+   padding: 10px;
+   margin: 1%;
+   float: left;
+   text-align: center;
+   background: rgba(255,255,255,0.8);
+   width: 200px;
+ }
+ 
+ .result-div:hover{
+   background: rgba(100,100,100,0.8);
+ }
+ 
+ li.token-input-token{
+   background: transparent !important;
  }
