@@ -1,9 +1,10 @@
-<div class = "alert-error" style="margin-left: 25%; position: absolute; background: transparent; font-size: 20pt; color: white">
+<div class="new-page-container" style="margin-left: auto; margin-right: auto; margin-top: 10%; width: 500px">
+  <div class = "alert-error" style="margin-left: 25%; position: absolute; background: transparent; font-size: 20pt; color: white">
 	<%= flash[:notice] %>
 </div>
 <div class="new-container" style="margin-top: 8%">
-  <div class ="form" style="margin: 2%">
-    <h1 style= "font-family: 'Amatic SC', cursive; color: #a1b7ff; font-weight: bold">Search By Artist</h1>
+  <div class ="form">
+    <h1 style= "background: rgba(50,50,50,0.8); width: 200px; padding: 8px; text-align: center; font-family: 'Amatic SC', cursive; color: #a1b7ff; font-weight: bold">Search By Artist</h1>
   	<%= form_tag artists_path, :method => :post, :remote => true do  %>
   		<%= text_field :artist_name, "", :placeholder => "Artist", :id => "artist_search" %><br/>
   		<%= submit_tag nil, :id => "artist_submit", :class => "btn btn-secondary", :style => "visibility: hidden" %>
@@ -11,7 +12,7 @@
   </div>
 </div>
 
-<div class="album-results-div" style="margin: 2%; margin-top: -2%; height: 600px; overflow: scroll;">
+<div class="album-results-div" style="margin-top: -10%; height: 600px; overflow: scroll;">
   <div class="albums-ajax-spinner" style="position: absolute; z-index: 1000; display: none; margin-left: 100px; margin-top: 100px">
     <style>
     #facebookG{
@@ -146,4 +147,5 @@
 </div>
 
 <%= @youtube %>
+</div>
 
