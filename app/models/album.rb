@@ -111,13 +111,18 @@ class Album < ActiveRecord::Base
   
   def set_tracks!
     self.tracks.each{|track| track.destroy }
-    tracklist.each{|track| self.tracks.create(title: track["title"], position: track["position"])}
+    tracklist.each{|track| self.tracks.build(title: track["title"], position: track["position"])}
   end
       
   private
 
   def set_tracks
-    tracklist.each{|track| self.tracks.create(title: track["title"], position: track["position"])}
+    Rails.logger.fatal "Building Tracks..."
+    start_time = Time.now.to_f
+    id = self.id
+    tracklist.each{|track| Track.create(title: track["title"], position: track["position"], :album_id => id)}
+    end_time = Time.now.to_f
+    Rails.logger.fatal "Tracks created in #{end_time - start_time} seconds"
   end
   
 end

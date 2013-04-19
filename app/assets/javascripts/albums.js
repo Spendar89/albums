@@ -125,4 +125,14 @@ $(document).ready(function(){
   $(window).resize(function(){
     setAlbumsDivHeight();
   });
+  $('#secret_button').mouseover(function(){
+    var number = Math.floor(Math.random()*5)
+    if(number == 2){
+      $(this).animate({left:'+=350px'}, 75)
+    }else if(number == 1){
+      $(this).animate({right:'+=400px'}, 75)
+    }else{
+      $(this).animate({top:'+=500px'}, 75)
+    }
+  });
 })

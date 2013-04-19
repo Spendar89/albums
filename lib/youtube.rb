@@ -8,12 +8,16 @@ module Youtube
     end
     
     def results
-      @client.videos_by(:query => @query)
+      @client.videos_by(:query => @query, :categories => [:music])
     end
   
     def yt_id
+      start = Time.now.to_f
       video_id = results.videos.first.try(:video_id)
-      video_id.split(":").last if video_id
+      video_id = video_id.split(":").last if video_id
+      finish = Time.now.to_f
+      puts "found yt_id in #{finish - start} seconds"
+      return video_id
     end
   end
 end

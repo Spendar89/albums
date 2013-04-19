@@ -27,7 +27,7 @@ class Artist < ActiveRecord::Base
   
   def set_album(album_title, discogs_id)
     album = self.albums.find_or_create_by_title(album_title, :artist_name => name, :in_collection => true, :discogs_id => discogs_id)
-    album.update_attribute(:discogs_id, discogs_id) unless album.discogs_id
+    album.update_attributes(:discogs_id => discogs_id) if album.discogs_id != discogs_id
     album
   end
   

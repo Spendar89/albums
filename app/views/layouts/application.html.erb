@@ -13,7 +13,7 @@
 	  <div class="navbar-inner">
 		  <%= link_to "This is My Music", "/", :class => "brand" %>
 	    <ul class="nav">
-	      <li><%= link_to "Add Album", "albums/new" %></li>
+	      <li><%= button_to "Button!", new_album_path, :method => :get, :id => "secret_button", :class => "btn btn-info" %></li>
 	    </ul>
       
       <div class="nav-controls span3">
@@ -24,7 +24,7 @@
   			<i class = "span4 next-track-nav icon-forward icon-3x">
   			</i>
       </div>
-		
+
 			<div class ="span3 lcd-div">
 				<div class="lcd-type">
 					<span id="lcd-position">00</span> <span id="lcd-minutes">00</span>:<span id="lcd-seconds">00</span>

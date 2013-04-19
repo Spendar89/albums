@@ -159,9 +159,14 @@
 	 color: #fcf692 !important;
  }
  
- .nav li a{
-	 font-size: 14px;
-	 color: black !important;
+ #secret_button{
+	 font-size: 20px;
+	 /*color: #484548 !important;*/
+   font-weight: bold;
+   margin-left: 50px;
+   width: 100px;
+   height: 35px;
+   position: absolute;
  }
  
  .invisible-overlay{
