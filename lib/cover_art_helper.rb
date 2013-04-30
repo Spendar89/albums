@@ -32,7 +32,7 @@ class CoverArtHelper
     reqs = @all_version_urls.map { |version_url| Typhoeus::Request.new(version_url) }
     reqs.each{ |request| hydra.queue(request) }
     hydra.run
-    reqs.map{|r| JSON.parse(r.response.response_body)["images"]}.flatten.compact
+    reqs.map{|r| JSON.parse(r.response.response_body)["images"] unless r.response.response_body.nil?}.flatten.compact
   end
   
   # def get_all
