@@ -64,14 +64,23 @@ function onPlayerReady(event) {
     }
   });
   
-  albumsRemaining = true
+  albumsRemaining = true;
+  isLoadingData = false;
   
-  $('.albums-div').bind('scroll', function(){
-     if(($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight -10) && albumsRemaining == true){    
+  $('.albums-div').unbind('scroll').bind('scroll', function(){
+     if(($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight -10) && !isLoadingData && albumsRemaining){    
+       isLoadingData = true; 
        current_page = $(".current-page:last").data('page');
        page = current_page + 1;
        $.get("/albums?page=" + page, function(response){
+         var new_page = $(response).find('.current-page:last').data('page');
+         if(new_page === current_page){
+           alert("finished");
+           albumsReamaining = false
+         }else{
+           alert("old-page:" + current_page + " new-page:" + new_page);
            $('.albums-div').append($(response).find('.albums-div').children());
+           isLoadingData  = false
            flipAlbums();
            hoverPlayIcon();
            setAlbumsDivHeight();
@@ -108,7 +117,11 @@ function onPlayerReady(event) {
                $('#lcd-position').text("01");
              }
            });
+         }
+    	
          });
+        
+       
      }
   });
 	
