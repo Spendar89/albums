@@ -75,10 +75,10 @@ function onPlayerReady(event) {
        $.get("/albums?page=" + page, function(response){
          var new_page = $(response).find('.current-page:last').data('page');
          if(new_page === current_page){
-           alert("finished");
+           // alert("finished");
            albumsReamaining = false
          }else{
-           alert("old-page:" + current_page + " new-page:" + new_page);
+           // alert("old-page:" + current_page + " new-page:" + new_page);
            $('.albums-div').append($(response).find('.albums-div').children());
            isLoadingData  = false
            flipAlbums();
