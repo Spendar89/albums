@@ -50,7 +50,9 @@ class AlbumsController < ApplicationController
   end
   
   def index
-    @albums = Album.where(in_collection: true).order(:created_at).reverse
+    @current_page = params[:page]
+    @current_page = 1 unless params[:page].present?
+    @albums = Album.where(in_collection: true).where("albums.back_cover_image_file_size > ?", 0).where("albums.front_cover_image_file_size > ?", 0).paginate(:page => @current_page, :per_page => 10).order('created_at DESC')
   end
   
 end

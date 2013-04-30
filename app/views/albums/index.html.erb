@@ -1,7 +1,7 @@
-
 <div class="row albums-container">
 	<div class= "albums-div" style = "margin-top: 5%">
-		<%= render @albums %>
+		<%= render @albums, :locals => {:current_page => @current_page.to_i }%>
+    <div class="current-page" data-page = "<%= @current_page.to_i %>"></div>
 	</div>
   <div class="info-div">
     <div class="now-playing-div">
@@ -16,5 +16,9 @@
   </div>
 	<div id="player" style="position: absolute; left: -2000px"></div>
 </div>
+
+
+
+
 
 

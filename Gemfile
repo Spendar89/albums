@@ -46,4 +46,6 @@ gem 'jquery-tokeninput-rails'
 
 gem 'typhoeus'
 
+gem 'will_paginate'
+
 gem 'anjlab-bootstrap-rails', '>= 2.3', :require => 'bootstrap-rails'

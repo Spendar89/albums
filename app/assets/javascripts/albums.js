@@ -1,4 +1,3 @@
-
 var tag = document.createElement('script');
 tag.src = "//www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -64,6 +63,54 @@ function onPlayerReady(event) {
       $('#lcd-position').text("01");
     }
   });
+  
+  albumsRemaining = true
+  
+  $('.albums-div').bind('scroll', function(){
+     if(($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight -10) && albumsRemaining == true){    
+       current_page = $(".current-page:last").data('page');
+       page = current_page + 1;
+       $.get("/albums?page=" + page, function(response){
+           $('.albums-div').append($(response).find('.albums-div').children());
+           flipAlbums();
+           hoverPlayIcon();
+           setAlbumsDivHeight();
+           $(window).resize(function(){
+             setAlbumsDivHeight();
+           });
+         	$('.play-track_' + page).click(function(){
+         		if($(this).data("playing") == false){
+         			if($(this).data("loaded") == false){
+         				loadAlbum($(this), player);
+         			}else{
+         			  album.unPauseTrack();
+         			}
+         		}else{
+               album.pauseTrack();
+         		}
+         	});
+	
+         	$(".next-track_" + page).click(function(){
+             album.nextTrack();
+         	});
+  
+           $(".prev-track_" + page).click(function(){
+             album.prevTrack();
+           });
+  
+           $(".next-track_" + page + ", .prev-track_" + page).click(function(){
+             var trackIndex = album.currentTrack.position
+             if(trackIndex < 9 && trackIndex > 0){
+         		  $('#lcd-position').text("0"+(trackIndex + 1));
+             }else if(trackIndex >= 9 && trackIndex < album.tracks.length ){
+               $('#lcd-position').text(trackIndex + 1);
+             }else{
+               $('#lcd-position').text("01");
+             }
+           });
+         });
+     }
+  });
 	
 }
 
@@ -126,25 +173,14 @@ $(document).ready(function(){
     setAlbumsDivHeight();
   });
   
-  $(document).ready(function () {
-      $("#artist_search").tokenInput("/artists/search", {
-        tokenLimit: 1, 
-        tokenValue: 'name',
-        onAdd: function(item){
-          $('#artist_discogs_id').val(item.id);
-          $('.albums-ajax-spinner').show();
-          $('#artist_submit').trigger('click');
-        }});
+  $("#artist_search").tokenInput("/artists/search", {
+    tokenLimit: 1, 
+    tokenValue: 'name',
+    onAdd: function(item){
+      $('#artist_discogs_id').val(item.id);
+      $('.albums-ajax-spinner').show();
+      $('#artist_submit').trigger('click');
+    }
   });
   
-  // $('#secret_button').mouseover(function(){
-  //   var number = Math.floor(Math.random()*5)
-  //   if(number == 2){
-  //     $(this).animate({left:'+=350px'}, 75)
-  //   }else if(number == 1){
-  //     $(this).animate({right:'+=400px'}, 75)
-  //   }else{
-  //     $(this).animate({top:'+=500px'}, 75)
-  //   }
-  // });
-})
+});
