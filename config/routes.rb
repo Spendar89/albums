@@ -9,6 +9,7 @@ Albums::Application.routes.draw do
   resources :albums do
     collection do
       match 'preview'
+      match 'block'
     end
     member do
       match 'change_cover'
