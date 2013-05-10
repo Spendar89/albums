@@ -53,10 +53,10 @@ class AlbumsController < ApplicationController
   end
   
   def index
-    if request.remote_ip == "98.175.24.253"
-      impressionist(Track.first)
-      redirect_to block_albums_path
-    end
+    # if request.remote_ip == "98.175.24.253"
+    #   impressionist(Track.first)
+    #   redirect_to block_albums_path
+    # end
     @current_page = params[:page].to_i
     @current_page = 1 unless params[:page].present?
     @albums = Album.where(in_collection: true).where("albums.back_cover_image_file_size > ?", 0).where("albums.front_cover_image_file_size > ?", 0).paginate(:page => @current_page, :per_page => 10).order('created_at DESC')
